@@ -1,5 +1,6 @@
 package com.example.cart_service.service;
 
+import com.example.cart_service.config.CommerceToolsConfig;
 import com.example.cart_service.dto.AddToCartRequest;
 import com.example.cart_service.dto.InventoryRequest;
 import com.example.cart_service.dto.InventoryResponse;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class CartService {
+    private final CtService ctService;
     private final InventoryServiceClient inventoryServiceClient;
 
 
@@ -26,8 +28,22 @@ public class CartService {
         }
 //        setup commerce tools connection here
 
+//        create cart
+        String CartResponse = ctService.createCart();
+        String cartId = extractCartId(CartResponse);
+        log.info("cartId: {}",cartId);
+        int version = extractVersion(CartResponse);
+        log.info("version: {}",version);
 
-        return "Item added to cart";
+//        Add Line item in cart
+        return ctService.addItemToCart(cartId,version,request.getProductId(),request.getQuantity());
+    }
+
+    private String extractCartId(String CartResponse){
+        return CartResponse.split("\"cartId\":\"")[1].split("\"")[0];
+    }
+    private int extractVersion(String CartResponse){
+        return Integer.parseInt(CartResponse.split("\"version\":\"")[1].split("\"")[0]);
     }
 }
 
