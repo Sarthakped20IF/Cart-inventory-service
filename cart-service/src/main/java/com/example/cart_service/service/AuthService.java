@@ -23,7 +23,7 @@ public class AuthService {
                 .headers(headers->headers.setBasicAuth(
                         CtConfig.getClientId(),CtConfig.getClientSecret()
                 ))
-                .bodyValue("grant_type=Client_credentials")
+                .bodyValue("grant_type=client_credentials")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();

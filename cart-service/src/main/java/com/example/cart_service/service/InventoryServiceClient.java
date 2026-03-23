@@ -14,14 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class InventoryServiceClient {
     private final InventoryClient inventoryClient;
 
-    @CircuitBreaker(name = "inventory-service",fallbackMethod = "fallback")
-    @Retry(name = "inventory-service")
-    public InventoryResponse checkStock(@RequestBody InventoryRequest request){
+    @CircuitBreaker(name = "inventoryService",fallbackMethod = "fallback")
+    @Retry(name = "inventoryService")
+    public InventoryResponse checkStock(InventoryRequest request){
         return inventoryClient.checkStock(request);
     }
 
-
-    public InventoryResponse fallback(InventoryRequest request, Throwable ex){
-        return new InventoryResponse(false,0,"inventory-service unavailable");
+// here -1 to avoid confusion between down and out of stock
+    public InventoryResponse fallback(InventoryRequest request, Exception ex){
+        return new InventoryResponse(false,-1,"inventory-service DOWN");
     }
 }

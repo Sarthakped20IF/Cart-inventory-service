@@ -36,10 +36,10 @@ public class CtService {
 
         String body = """
                 {
-                    "version" = %d,
+                    "version" : %d,
                     "actions":[
                         {
-                           "action": "addLineItem"
+                           "action": "addLineItem",
                            "productId": "%s",
                            "variantId": 1,
                            "quantity": %d
@@ -48,7 +48,7 @@ public class CtService {
                 }    
                 """.formatted(version,productId,quantity);
         return webClient.post()
-                .uri(ctconfig.getApiUrl()+"/"+ctconfig.getProjectKey()+"/carts"+cartId)
+                .uri(ctconfig.getApiUrl()+"/"+ctconfig.getProjectKey()+"/carts/"+cartId)
                 .headers(headers->headers.setBearerAuth(token))
                 .bodyValue(body)
                 .retrieve()

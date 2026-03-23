@@ -26,6 +26,9 @@ public class CartService {
             log.error("{} not available",response);
             throw new RuntimeException(response.getMessage());
         }
+        if(response.getAvailableQuantity() == -1){
+            throw new RuntimeException("Inventory service down");
+        }
 //        setup commerce tools connection here
 
 //        create cart
@@ -40,10 +43,10 @@ public class CartService {
     }
 
     private String extractCartId(String CartResponse){
-        return CartResponse.split("\"cartId\":\"")[1].split("\"")[0];
+        return CartResponse.split("\"id\":\"")[1].split("\"")[0];
     }
     private int extractVersion(String CartResponse){
-        return Integer.parseInt(CartResponse.split("\"version\":\"")[1].split("\"")[0]);
+        return Integer.parseInt(CartResponse.split("\"version\":")[1].split(",")[0]);
     }
 }
 
